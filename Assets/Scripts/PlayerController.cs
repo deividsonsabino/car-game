@@ -8,13 +8,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float horsePower = 0;
     private const float turnSpeed = 25.0f;
     private float horizontalInput;
-    private float vertialInput;
+    private float verticalInput;
     private Rigidbody playerRb;
+    [SerializeField] GameObject centerOfMass;
 
     // Start is called before the first frame update
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
+        playerRb.centerOfMass = centerOfMass.transform.position;
     }
 
     // Update is called once per frame
@@ -22,8 +24,8 @@ public class PlayerController : MonoBehaviour
     {
         // This is where we get player input
         horizontalInput = Input.GetAxis("Horizontal");
-        vertialInput = Input.GetAxis("Vertical");
-        playerRb.AddRelativeForce(Vector3.forward * horsePower * vertialInput);
+        verticalInput = Input.GetAxis("Vertical");
+        playerRb.AddRelativeForce(Vector3.forward * horsePower * verticalInput);
         // We move the vehicle forward
         //transform.Translate(Vector3.forward * Time.deltaTime * speed * vertialInput);
         // We turn the vehicle
