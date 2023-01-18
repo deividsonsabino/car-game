@@ -7,12 +7,14 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float horsePower = 0;
+    [SerializeField] float rpm;
     private const float turnSpeed = 25.0f;
     private float horizontalInput;
     private float verticalInput;
     private Rigidbody playerRb;
     [SerializeField] GameObject centerOfMass;
     [SerializeField] TextMeshProUGUI speedometerText;
+    [SerializeField] TextMeshProUGUI rpmText;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +35,9 @@ public class PlayerController : MonoBehaviour
         // We turn the vehicle
         transform.Rotate(Vector3.up, Time.deltaTime * turnSpeed * horizontalInput);
         speed = Mathf.RoundToInt(playerRb.velocity.magnitude * 3.6f);
-        speedometerText.SetText("Speed " + speed + " KM/h");
+        speedometerText.SetText("Speed: " + speed + " KM/h");
+        rpm = (speed % 30) * 40;
+        rpmText.SetText("RPM: " + rpm);
+
     }
 }
