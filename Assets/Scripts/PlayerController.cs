@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject centerOfMass;
     [SerializeField] TextMeshProUGUI speedometerText;
     [SerializeField] TextMeshProUGUI rpmText;
+    [SerializeField] List<WheelCollider> allWheels;
+    [SerializeField] int wheelsOnGround;
 
     // Start is called before the first frame update
     void Start()
@@ -29,15 +31,38 @@ public class PlayerController : MonoBehaviour
         // This is where we get player input
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
-        playerRb.AddRelativeForce(Vector3.forward * horsePower * verticalInput);
-        // We move the vehicle forward
-        //transform.Translate(Vector3.forward * Time.deltaTime * speed * vertialInput);
-        // We turn the vehicle
-        transform.Rotate(Vector3.up, Time.deltaTime * turnSpeed * horizontalInput);
-        speed = Mathf.RoundToInt(playerRb.velocity.magnitude * 3.6f);
-        speedometerText.SetText("Speed: " + speed + " KM/h");
-        rpm = (speed % 30) * 40;
-        rpmText.SetText("RPM: " + rpm);
+        if (IsGround())
+        {
+            playerRb.AddRelativeForce(Vector3.forward * horsePower * verticalInput);
+            // We move the vehicle forward
+            //transform.Translate(Vector3.forward * Time.deltaTime * speed * vertialInput);
+            // We turn the vehicle
+            transform.Rotate(Vector3.up, Time.deltaTime * turnSpeed * horizontalInput);
+            speed = Mathf.RoundToInt(playerRb.velocity.magnitude * 3.6f);
+            speedometerText.SetText("Speed: " + speed + " KM/h");
+            rpm = (speed % 30) * 40;
+            rpmText.SetText("RPM: " + rpm);
+        }
+    }
 
+    bool IsGround()
+    {
+        wheelsOnGround = 0;
+        foreach (WheelCollider wheel in allWheels)
+        {
+            if (wheel.isGrounded)
+            {
+                wheelsOnGround++;
+            }
+        }
+
+        if(wheelsOnGround == 4)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
